@@ -6,9 +6,9 @@ using InteractiveUtils
 
 # ╔═╡ cbbe363e-8fb3-11ee-21fb-2f4707230a48
 begin
-	import HTTP;
-	helpers = include("helpers.jl");
-	input = helpers.get_input(2023,1);
+    import HTTP
+    helpers = include("helpers.jl")
+    input = helpers.get_input(2023, 1)
 end
 
 # ╔═╡ 5e3317e7-303a-426a-a25a-27d2f2f4afda
@@ -18,66 +18,67 @@ a1b2c3d4e5f
 treb7uchet"""
 
 # ╔═╡ 83814cc8-3a47-4d31-accb-8810ae63dbde
-begin 
-	# part 1
+begin
+    # part 1
 
-	function recover_calibration_values_1(line)
-		pat = r"^.*?([1-9]).*$"
-		m = match(pat, line)
-		first = m[1]
-		m = match(pat, reverse(line))
-		second = m[1]
+    function recover_calibration_values_1(line)
+        pat = r"^.*?([1-9]).*$"
+        m = match(pat, line)
+        first = m[1]
+        m = match(pat, reverse(line))
+        second = m[1]
 
-		first * second
-	end
+        first * second
+    end
 
-	function solve1()
-		split_input = split(input, '\n')
-		if isempty(split_input[end])
-			pop!(split_input)
-		end
-		calibrated = map(recover_calibration_values_1, split_input)
-		
-		ans = sum(map(x -> parse(Int, x, base=10), calibrated))
-	end
+    function solve1()
+        split_input = split(input, '\n')
+        if isempty(split_input[end])
+            pop!(split_input)
+        end
+        calibrated = map(recover_calibration_values_1, split_input)
 
-	solve1()
+        ans = sum(map(x -> parse(Int, x, base = 10), calibrated))
+    end
+
+    solve1()
 end
 
 # ╔═╡ 613cd5b5-3af3-4aba-99e4-00fbe9410758
 begin # part 2
-	long_digit_names = ["one", "two", "three","four","five","six","seven","eight","nine"]
-	decode = Dict((v,string(i)) for (i,v) in enumerate(long_digit_names))
+    long_digit_names =
+        ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    decode = Dict((v, string(i)) for (i, v) in enumerate(long_digit_names))
 
-	digit_pat = "[1-9]"
-	word_digit_pat = ("(?:$(join(long_digit_names, '|')))")
-	full_digit_pat = "($word_digit_pat|$digit_pat)"
-	full_digit_pat = Regex("^.*?$full_digit_pat.*$full_digit_pat.*?\$")
+    digit_pat = "[1-9]"
+    word_digit_pat = ("(?:$(join(long_digit_names, '|')))")
+    full_digit_pat = "($word_digit_pat|$digit_pat)"
+    full_digit_pat = Regex("^.*?$full_digit_pat.*$full_digit_pat.*?\$")
 
-	function recover_calibration_values_2(line)
-		m = match(full_digit_pat, line)
-		if isnothing(m)
-			return recover_calibration_values_1(line)
-		else
-			first = length(m[1]) > 1 ? decode[m[1]] : m[1]
-			second = length(m[2]) > 1 ? decode[m[2]] : m[2]
+    function recover_calibration_values_2(line)
+        m = match(full_digit_pat, line)
+        if isnothing(m)
+            return recover_calibration_values_1(line)
+        else
+            first = length(m[1]) > 1 ? decode[m[1]] : m[1]
+            second = length(m[2]) > 1 ? decode[m[2]] : m[2]
 
-			return first * second
-		end
-	end
+            return first * second
+        end
+    end
 
-	function solve2()
-		split_input = split(input, '\n')
-		if isempty(split_input[end])
-			pop!(split_input)
-		end
-		
-		calibrated = map(recover_calibration_values_2, split_input)		
-		
-		ans = sum(map(x -> parse(Int, x, base=10), calibrated))
-	end
-	
-	solve2()
+    function solve2()
+        split_input = split(input, '\n')
+        if isempty(split_input[end])
+            pop!(split_input)
+        end
+
+        calibrated = map(recover_calibration_values_2, split_input)
+
+        ans = sum(map(x -> parse(Int, x, base = 10), calibrated))
+    end
+
+    solve2()
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

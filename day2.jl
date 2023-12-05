@@ -6,9 +6,9 @@ using InteractiveUtils
 
 # ╔═╡ 60070c8a-90d1-11ee-2ecd-49b8958fdce2
 begin
-	import HTTP;
-	helpers = include("helpers.jl");
-	input = helpers.get_input(2023,2);
+    import HTTP
+    helpers = include("helpers.jl")
+    input = helpers.get_input(2023, 2)
 end
 
 # ╔═╡ 45297a12-43f8-4b99-9af6-da374a3c8277
@@ -20,101 +20,102 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"""
 
 # ╔═╡ dcf9e842-e79f-4493-96a2-9870bbe39ba0
 begin
-	struct Reveal
-		red::Int
-		green::Int
-		blue::Int
-	end
+    struct Reveal
+        red::Int
+        green::Int
+        blue::Int
+    end
 
-	Reveal(reveal_str) = begin
-		function anon(pat)
-			m = match(pat, reveal_str)
-			if isnothing(m)
-				0
-			else
-				parse(Int, m[1], base=10)
-			end
-		end
-		
-		red = anon(r"(\d*) red")
-		green = anon(r"(\d*) green")
-		blue = anon(r"(\d*) blue")
+    Reveal(reveal_str) = begin
+        function anon(pat)
+            m = match(pat, reveal_str)
+            if isnothing(m)
+                0
+            else
+                parse(Int, m[1], base = 10)
+            end
+        end
 
-		Reveal(red, green, blue)
-	end
+        red = anon(r"(\d*) red")
+        green = anon(r"(\d*) green")
+        blue = anon(r"(\d*) blue")
 
-	# make it easier to check at a glance if a line got parsed correctly
-	Base.show(io::IO, reveal::Reveal) = print(io, "$(reveal.red)R $(reveal.green)G $(reveal.blue)B")
+        Reveal(red, green, blue)
+    end
+
+    # make it easier to check at a glance if a line got parsed correctly
+    Base.show(io::IO, reveal::Reveal) =
+        print(io, "$(reveal.red)R $(reveal.green)G $(reveal.blue)B")
 end
 
 # ╔═╡ d1f18986-8c5e-42f8-a89a-b2ba09518110
 begin
-	struct Game
-		id::Int
-		reveals::Vector{Reveal}
-	end
+    struct Game
+        id::Int
+        reveals::Vector{Reveal}
+    end
 
-	Game(line) = begin
-		pat = r"^Game (\d+):(.*)$"
+    Game(line) = begin
+        pat = r"^Game (\d+):(.*)$"
 
-		m = match(pat, line)
-		
-		id = parse(Int, m[1], base=10)
-		reveals = map(Reveal, split(m[2],';'))
-		
-		Game(id, reveals)
-	end
+        m = match(pat, line)
 
-	# returns the largest value across all draws
-	Base.maximum(game::Game) = begin
-		return Reveal(
-			Base.maximum(r.red for r in game.reveals), 
-			Base.maximum(r.green for r in game.reveals),
-			Base.maximum(r.blue for r in game.reveals)
-		)
-	end
+        id = parse(Int, m[1], base = 10)
+        reveals = map(Reveal, split(m[2], ';'))
 
-	is_possible(game::Game, restrictions::Reveal) = begin
-		r = maximum(game) 
+        Game(id, reveals)
+    end
 
-		cond1 = r.red > restrictions.red
-		cond2 = r.green > restrictions.green
-		cond3 = r.blue > restrictions.blue
+    # returns the largest value across all draws
+    Base.maximum(game::Game) = begin
+        return Reveal(
+            Base.maximum(r.red for r in game.reveals),
+            Base.maximum(r.green for r in game.reveals),
+            Base.maximum(r.blue for r in game.reveals),
+        )
+    end
 
-		if cond1 || cond2 || cond3
-			return false
-		else
-			return true
-		end
-	end
+    is_possible(game::Game, restrictions::Reveal) = begin
+        r = maximum(game)
 
-	min_cubes(game::Game) = begin
-		return maximum(game)
-	end
-	
-	xy = split(input,'\n')
-	pop!(xy)
-		
-	function solve1()
-		games = map(Game, xy)
-		
-		restriction = Reveal(12,13,14)
-			
-		possible_games = filter(g -> is_possible(g, restriction), games)
+        cond1 = r.red > restrictions.red
+        cond2 = r.green > restrictions.green
+        cond3 = r.blue > restrictions.blue
 
-		sum(x.id for x in possible_games)
-	end
+        if cond1 || cond2 || cond3
+            return false
+        else
+            return true
+        end
+    end
 
-	function solve2()
-		games = map(Game, xy)
-		
-		power(cubes::Reveal) = cubes.red * cubes.green * cubes.blue
-		
-		x = map(min_cubes, games)
-		sum(map(power, x))
-	end
+    min_cubes(game::Game) = begin
+        return maximum(game)
+    end
 
-	solve1(), solve2()
+    xy = split(input, '\n')
+    pop!(xy)
+
+    function solve1()
+        games = map(Game, xy)
+
+        restriction = Reveal(12, 13, 14)
+
+        possible_games = filter(g -> is_possible(g, restriction), games)
+
+        sum(x.id for x in possible_games)
+    end
+
+    function solve2()
+        games = map(Game, xy)
+
+        power(cubes::Reveal) = cubes.red * cubes.green * cubes.blue
+
+        x = map(min_cubes, games)
+        sum(map(power, x))
+    end
+
+    solve1(), solve2()
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001

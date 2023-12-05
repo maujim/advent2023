@@ -6,13 +6,13 @@ using InteractiveUtils
 
 # ╔═╡ 60070c8a-90d1-11ee-2ecd-49b8958fdce2
 begin
-	import HTTP;
-	helpers = include("helpers.jl");
-	input = helpers.get_input(2023,3);
+    import HTTP
+    helpers = include("helpers.jl")
+    input = helpers.get_input(2023, 3)
 end
 
 # ╔═╡ 45297a12-43f8-4b99-9af6-da374a3c8277
-test_input = """467..114..
+test_input = raw"""467..114..
 ...*......
 ..35..633.
 ......#...
@@ -25,48 +25,15 @@ test_input = """467..114..
 
 # ╔═╡ d1f18986-8c5e-42f8-a89a-b2ba09518110
 begin
-	xy = split(input,'\n')
-	pop!(xy)
-	
-	symbols = setdiff(Set(input), ['\n', '.'], "0123456789")
+    xy = split(input, '\n')
+    pop!(xy)
 
-	struct N
-		m::RegexMatch
-		value::Int
-		indices::Vector{Int}
-	end
+    function solve1() end
 
-	N(match::RegexMatch) = N(
-		match,
-		parse(Int, match.match, base=10),
-		range(match.offset, match.offset + length(match.match) - 1)
-	)
+    function solve2() end
 
-	Base.length(n::N) = length(n.m.match)
-	offset(n::N) = n.m.offset
-	int(n::N) = parse(Int, n.m.match, base=10)
-	ids(n::N) = range(offset(n.m))
-		
-	function solve1()
-	end
-
-	function solve2()
-	end
-
-	solve1(), solve2()
+    solve1(), solve2()
 end
-
-# ╔═╡ f3ca83e5-e784-487b-a904-5d31b9eed0d6
-# nums
-begin
-	pat = r"(\d+)"
-	[N(x) for x in eachmatch(pat,input)]
-	
-#	ms = map(N, eachmatch(pat, input))
-end
-
-# ╔═╡ bc8dc8a7-18d0-4f70-84fe-31d8e4bee2c3
-
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -250,7 +217,5 @@ version = "1.2.13+0"
 # ╠═60070c8a-90d1-11ee-2ecd-49b8958fdce2
 # ╠═45297a12-43f8-4b99-9af6-da374a3c8277
 # ╠═d1f18986-8c5e-42f8-a89a-b2ba09518110
-# ╠═f3ca83e5-e784-487b-a904-5d31b9eed0d6
-# ╠═bc8dc8a7-18d0-4f70-84fe-31d8e4bee2c3
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
