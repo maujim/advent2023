@@ -25,9 +25,6 @@ test_input = raw"""467..114..
 
 # ╔═╡ d1f18986-8c5e-42f8-a89a-b2ba09518110
 begin
-    xy = split(input, '\n')
-    pop!(xy)
-
     function solve1() end
 
     function solve2() end

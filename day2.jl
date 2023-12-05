@@ -93,11 +93,8 @@ begin
         return maximum(game)
     end
 
-    xy = split(input, '\n')
-    pop!(xy)
-
     function solve1()
-        games = map(Game, xy)
+        games = map(Game, input)
 
         restriction = Reveal(12, 13, 14)
 
@@ -107,7 +104,7 @@ begin
     end
 
     function solve2()
-        games = map(Game, xy)
+        games = map(Game, input)
 
         power(cubes::Reveal) = cubes.red * cubes.green * cubes.blue
 

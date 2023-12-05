@@ -32,11 +32,7 @@ begin
     end
 
     function solve1()
-        split_input = split(input, '\n')
-        if isempty(split_input[end])
-            pop!(split_input)
-        end
-        calibrated = map(recover_calibration_values_1, split_input)
+        calibrated = map(recover_calibration_values_1, input)
 
         ans = sum(map(x -> parse(Int, x, base = 10), calibrated))
     end
@@ -68,12 +64,7 @@ begin # part 2
     end
 
     function solve2()
-        split_input = split(input, '\n')
-        if isempty(split_input[end])
-            pop!(split_input)
-        end
-
-        calibrated = map(recover_calibration_values_2, split_input)
+        calibrated = map(recover_calibration_values_2, input)
 
         ans = sum(map(x -> parse(Int, x, base = 10), calibrated))
     end
